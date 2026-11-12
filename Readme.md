@@ -109,7 +109,7 @@ Una vez que el pipeline genera el archivo CSV final, la importación en la aplic
 2. Selecciona el archivo generado por el ETL (`transacciones_bluecoins.csv`).
 3. Asegurate de elegir las siguientes configuraciones.
 > **Vista previa de la configuración en la App:**
-![alt text](configuration.png)
+![alt text](Configuration.png)
 
 
 
