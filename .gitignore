@@ -1,0 +1,31 @@
+# Environments & Variables
+.env
+.venv/
+env/
+venv/
+
+# Python cache & bytecode
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+
+# Databases & local data (Money Manager source)
+*.sqlite
+*.sqlite3
+*.db
+
+# ETL Outputs (Generated files)
+*.csv
+bluecoins_ready_import.csv
+
+# IDEs & Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS generated files
+.DS_Store
+Thumbs.db
