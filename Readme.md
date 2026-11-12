@@ -38,12 +38,21 @@ money-manager-to-bluecoins-etl/
 2. **Transform (`transform.py`):**
    - Conversión de marcas de tiempo (`ZDATE`) desde milisegundos Unix a fechas legibles con soporte de huso horario parametrizado (`America/Bogota` por defecto).
    - Normalización de códigos de divisas (ej. `COP_COP` a `COP`).
-   - Limpieza de montos (`AMOUNT`), manejo de signos según el tipo de transacción (`DO_TYPE`) y resolución de transferencias.
    - Limpieza y saneamiento de campos de texto (`NOTE`, `D_DESCRIPTION`).
+   - Limpieza de montos (`AMOUNT`), manejo de signos según el tipo de transacción (`DO_TYPE`) y resolución de transferencias.**************************
+   - Mapeo y normalización de tipos de transacción (`DO_TYPE`): Clasificación y estandarización de registros en categorías operativas (Ingresos, Gastos y Transferencias).
+   - Aplicación de tasas de cambio: Conversión de montos multidivisa utilizando tasas de cambio de referencia para estandarizar la moneda base del reporte. 
 
-3. **Load (`load.py` & `main.py`):**
-   - Validación final del DataFrame transformado.
-   - Exportación estructurada al archivo `bluecoins_ready_import.csv` listo para su importación.
+3. **Load (`load.py`):**
+   - Validación final de datos: Verificación de esquemas, control de nulos críticos y consistencia del DataFrame transformado antes de la persistencia.
+   - Exportación estructurada: Generación del archivo `final bluecoins_ready_import.csv` con los tipos de datos correctos, codificación estándar y los delimitadores exactos requeridos para una importación limpia en Bluecoins.
+
+4. **Load (`main.py`):**
+   - Control secuencial del flujo: Coordinación ordenada de las fases del pipeline (Extract -> Transform -> Load).
+   - Gestión de ejecución y entorno: Lectura centralizada de variables de configuración y manejo del flujo de ejecución del script.
+ 
+
+
 
 ---
 
@@ -65,7 +74,7 @@ El pipeline soporta la parametrización de sus rutas, rangos de fechas y zona ho
 
 ### 1. Clonar el repositorio
 ```bash
-git clone https://github.com/tu-usuario/money-manager-to-bluecoins-etl.git
+git clone https://github.com/Josecampu/money-manager-to-bluecoins-etl
 cd money-manager-to-bluecoins-etl
 ```
 
@@ -85,7 +94,25 @@ python main.py
 ```
 
 O bien, definir variables de entorno en tu terminal antes de correrlo (opcional):
-```powershell
-$env:ETL_START_DATE="2024-01-01"
+```bash
+export ETL_START_DATE="2024-01-01"
+export ETL_END_DATE="2026-11-12"
+export TARGET_TIMEZONE="America/Bogota"
 python main.py
 ```
+
+## ⚙️ Configuración de Importación en Bluecoins
+
+Una vez que el pipeline genera el archivo CSV final, la importación en la aplicación móvil o de escritorio de Bluecoins requiere verificar el mapeo de columnas para que las transferencias y los signos se procesen correctamente:
+
+1. Abre Bluecoins y ve a **Ajuste** > **Gestión de datos** > **Importar Excel(.csv)** > **Importar trnasaions de Excel**.
+2. Selecciona el archivo generado por el ETL (`transacciones_bluecoins.csv`).
+3. Asegurate de elegir las siguientes configuraciones.
+> **Vista previa de la configuración en la App:**
+![alt text](configuration.png)
+
+
+
+## Resultados
+
+![alt text](results.png)
